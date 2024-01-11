@@ -14,9 +14,8 @@ El mismo fue realizado en lenguaje Kotlin aplicando el paradigma de programació
 git clone https://github.com/francobottini99/PR-KOTLIN-2023.git
 ```
 
-## Requisitos
-
-Para poder ejecutar el programa se necesita jdk 20.
+> [!NOTE]
+> Para poder ejecutar el programa se necesita jdk 20.
 
 ## ¿Cómo utilizar?
 

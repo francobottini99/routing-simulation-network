@@ -1,55 +1,55 @@
-# Simulación de envío de paquetes entre routers de una red utilizando el Algoritmo de Dijkstra para buscar el camino corto.
+# Simulation of Packet Transmission Between Routers in a Network Using Dijkstra's Algorithm to Find the Shortest Path
 
-En este proyecto se realizó la simulación del envío de paquetes entre routers de una red. A su vez, se utilizo el algoritmo de Dijkstra para buscar el camino más corto entre un router de origen y otro de destino teniendo en cuenta el ancho de banda de las conexiones.
+This project simulates packet transmission between routers in a network. Dijkstra's algorithm is used to find the shortest path between a source router and a destination router, considering the bandwidth of the connections.
 
-El mismo fue realizado en lenguaje Kotlin aplicando el paradigma de programación orientado a objetos.
+The project was implemented in Kotlin, applying the object-oriented programming paradigm.
 
-### Autores:
+### Authors:
 - **Bottini, Franco Nicolas**
 - **Robledo, Valentin**
 
-## ¿Cómo clonar este repositorio?
+## How to Clone This Repository
 
 ```console
 git clone https://github.com/francobottini99/PR-KOTLIN-2023.git
 ```
 
 > [!NOTE]
-> Para poder ejecutar el programa se necesita jdk 20.
+> To run the program, you need jdk 20.
 
-## ¿Cómo utilizar?
+## How to Use
 
-Vamos al directorio principal del proyecto y utilizamos el siguiente comando
+Navigate to the main directory of the project and use the following command:
 
 ```console
 ./gradlew run
 ```
 
-Nos pedirá ingresar algunos parámetros para la simulación
+The program will prompt you to enter some parameters for the simulation:
 
 ```console
-Numero de routers y paginas
+Number of routers and pages
 ```
 
 ```console
-Tamano de la pagina
+Page size
 ```
 
 ```console
-Ancho de banda
+Bandwidth
 ```
 
 ```console
-Numero de ciclos
+Number of cycles
 ```
 
-Una vez ingresados los parámetros inicia la simulación.
+Once the parameters are entered, the simulation will begin.
 
-### Ejemplo
+### Example
 
-Veremos un ejemplo para 3 routers, 3 páginas iniciales con un tamaño de 512, un ancho de banda de las conexiones de 256 y 12 ciclos de simulación.
+Here's an example with 3 routers, 3 initial pages of size 512, connection bandwidth of 256, and 12 simulation cycles.
 
-Conexiones generadas:
+Generated connections:
 
 ```console
 Router [1] Connections: [1 -> 2, 3 -> 1, 1 -> 3, 2 -> 1]
@@ -57,19 +57,19 @@ Router [2] Connections: [1 -> 2, 2 -> 3, 2 -> 1, 3 -> 2]
 Router [3] Connections: [2 -> 3, 3 -> 1, 1 -> 3, 3 -> 2]
 ```
 
-Ciclo 1, envío de paquetes:
+Cycle 1, packet transmission:
 
 ```console
---- Cicle 1 - Task: SEND_STORE ---
+--- Cycle 1 - Task: SEND_STORE ---
 Router [1] - Packet sent ID[1] from router [1] to router [3] | with destiny router [3]
 Router [2] - Packet sent ID[1] from router [2] to router [3] | with destiny router [3]
 Router [3] - Packet sent ID[1] from router [3] to router [2] | with destiny router [2]
 ```
 
-Ciclo 2, recepción de paquetes:
+Cycle 2, packet reception:
 
 ```console
---- Cicle 2 - Task: RECEPTION ---
+--- Cycle 2 - Task: RECEPTION ---
 Router [1] - Empty buffer.
 Router [1] - Empty buffer.
 Router [2] - Empty buffer.
@@ -80,41 +80,40 @@ Router [3] - Reconstruct Page [3] Size [47]
 Router [3] - Packet stored ID[1] from router [1] with destiny router [3]
 ```
 
-Podemos ver que la página [1] se generó de un size [45] por lo tanto se fragmentó en un único paquete y al siguiente ciclo ya se reconstruyó la misma.
+We can see that page [1] was generated with a size [45], so it was fragmented into a single packet and reconstructed in the next cycle.
 
-## Diagrama de Clases
+## Class Diagram
 
 ![TP2_PARADIGMAS_UML_CLASS.png](img/UML_CLASS.png)
 
-## Funcionamiento
+## Functionality
 
-A continuación se explica el funcionamiento de la simulación.
+Here is an explanation of how the simulation works.
 
-### Generación de la red
+### Network Generation
 
-La fase inicial del proceso implica la generación de un grafo que actuará como la representación estructural de la red. Para garantizar propiedades esenciales, se impone la condición de que dicho grafo sea conexo, lo que significa que existe al menos un camino entre cualquier par de nodos en la red. Este enfoque de diseño facilita la coherencia de la simulación.
+The initial phase of the process involves generating a graph that acts as the structural representation of the network. To ensure essential properties, the graph is required to be connected, meaning there is at least one path between any pair of nodes in the network. This design approach ensures consistency in the simulation.
 
-Cada nodo del grafo denota un router en la topología de la red. En este contexto, las aristas del grafo actúan como las conexiones entre routers. La asignación de pesos a estas aristas refleja el ancho de banda asociado con cada conexión.
+Each node in the graph represents a router in the network topology. The graph's edges represent the connections between routers, and the weights of these edges indicate the bandwidth associated with each connection.
 
-Además, inicialmente se generan páginas como routers tenga el sistema. El peso de las mismas se establece de forma aleatoria entre 1 y el valor ingresado como parámetro.
+Additionally, pages are initially generated for as many routers as the system has. The size of these pages is randomly set between 1 and the value specified as a parameter.
 
-### Inicialización de la transmisión
+### Transmission Initialization
 
-Una vez generada la red y las páginas iniciales, podemos iniciar con la simulación. Para cada router de la red se toma otro router de destino aleatorio y una página aleatoria para enviar. El router toma la página y la fracciona en paquetes que guarda en un buffer interno.
+Once the network and initial pages are generated, the simulation can begin. For each router in the network, a random destination router and a random page are selected for transmission. The router fragments the page into packets and stores them in an internal buffer.
 
-Luego, se generan los caminos aleatorios desde cada router a cada destino. Estos caminos más cortos se almacenan en una lista de la red donde cada router puede consultarla a la hora de realizar un envío.
+Then, random paths are generated from each router to each destination. These shortest paths are stored in a network list that each router can consult for sending packets.
 
+### First Cycle - Packet Transmission
 
-### Primer ciclo - Envío de paquetes
+In the first cycle, each router selects a packet to send and places it in the connection buffer. If there are no packets, the router waits until the next transmission cycle and checks again if there are packets to send.
 
-En el primer ciclo, cada router tomará un paquete para enviar y lo colocará en el buffer de la conexión. En caso de no haber paquetes, el router simplemente esperará al próximo ciclo de envío y volverá a consultar si posee algún paquete por enviar.
+### Second Cycle - Packet Reception
 
-### Segundo ciclo - Recepción de paquetes
+In the next cycle, each router retrieves a packet from the connection buffer for each connection it has. The router checks the destination of the packet; if the destination is different from the current router, the packet is placed in the internal transmission buffer to be sent in the next cycle. If the packet's destination is the current router, it is stored in an internal buffer to await the reconstruction of the page. Once all packets are received and the page is reconstructed, the page is discarded to simulate its delivery to a terminal.
 
-Al siguiente ciclo, cada router tomará un paquete del buffer de la conexión, esto lo realiza por cada conexión que el mismo posea. El router verifica el destino del paquete, en el caso que el paquete tenga un destino diferente al router actual, irá a parar al buffer interno de envíos para ser enviado en el ciclo próximo. Caso contrario, donde el destino del paquete sea el router actual, se almacena en un buffer interno donde espera a tener todos los paquetes para reconstruir la página. En caso de tener todos los paquetes y reconstruir la página, simplemente se desecha a fin de simular el envío a una terminal.
+### Subsequent Cycles
 
-### Próximos ciclos
+In the following cycles, packet transmission and reception continue, one by one.
 
-En los ciclos próximos continua el envío y recepción de paquetes, uno por uno.
-
-Para alimentar más la simulación, cada 12 ciclos se generan más páginas como routers tenga la red y se recalculan los caminos óptimos. Además, cada 6 ciclos también se recalculan los caminos óptimos en función del ancho de banda de la red.
+To enrich the simulation, every 12 cycles, new pages are generated for as many routers as the network has, and optimal paths are recalculated. Additionally, optimal paths are recalculated every 6 cycles based on the network's bandwidth.
